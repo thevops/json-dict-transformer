@@ -4,7 +4,7 @@ sys.path.append('../')
 # The above part can be omitted if json_transformer is installed as a package
 
 
-from json_transformer import translateDictToDict
+from json_dict_transformer import translateDictToDict
 
 input_dict = {
     "name": "John",
