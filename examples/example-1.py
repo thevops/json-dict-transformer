@@ -6,6 +6,10 @@ sys.path.append('../')
 
 from json_dict_transformer import translateDictToDict
 
+
+def upperLetters(input: str) -> str:
+    return input.upper()
+
 input_dict = {
     "name": "John",
     "surname": "Doe",
@@ -37,7 +41,8 @@ schema_dict = {
     ],
     "hobbies": [
         "txt::My hobbies are: ",
-        "json::hobbies"
+        upperLetters, # this is function 
+        "json::hobbies",
     ]
 }
 

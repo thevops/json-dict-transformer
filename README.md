@@ -13,7 +13,6 @@ For example, splitting some fields or concatenating fields into other fields.
 In other words, it is a process of reformatting JSON data preserving values
 but changing the structure.
 
-
 ## Example
 
 ```python
@@ -50,6 +49,7 @@ schema_dict = {
     ],
     "hobbies": [
         "txt::My hobbies are: ",
+        upperLetters, # this is function
         "json::hobbies"
     ]
 }
@@ -84,7 +84,7 @@ Output dict:
   'full name': 'John Doe',
   'age': '30',
   'address': 'Main Street,123,New York,USA',
-  'hobbies': 'My hobbies are: football,basketball,tennis'
+  'hobbies': 'MY HOBBIES ARE: football,basketball,tennis'
 }
 ```
 
@@ -130,7 +130,25 @@ The selector adds a string. It can be used to add a splitter or
 any other text to the output data.
 
 
+`<function>` (Callable object)
+
+Allows to use a function over the data on the left side of that function.
+A function can be passed from outside.
+Requires to handle a single argument of type string.
+
+
 ## Similar projects
 
 - https://github.com/Onyo/jsonbender
 - https://github.com/ebi-ait/json-converter
+
+
+## Changelog
+
+### 1.0.0
+
+- The first version
+
+### 1.1.0
+
+- Add support for functions for processing data during transformation
