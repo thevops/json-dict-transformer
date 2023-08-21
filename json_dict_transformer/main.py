@@ -24,7 +24,7 @@ def getDictfield(data, field):
         raise Exception(f"Unknown type {type(result)} for {field}")
 
 
-def translateDictToDict(input: dict, schema: dict, func: Callable = None) -> dict:
+def translateDictToDict(input: dict, schema: dict, funcCollection: Callable = None) -> dict:
     """
     Create output dict from input dict using schema dict as template.
     This function is recursive.
@@ -57,11 +57,18 @@ def translateDictToDict(input: dict, schema: dict, func: Callable = None) -> dic
                     elif item_type == "txt":
                         output[k] = output[k] + item_value
 
+                    elif item_type == "func":
+                        # Check if function collection is provided
+                        if funcCollection is not None:
+                            # Get function from collection
+                            func = getattr(funcCollection, item_value)
+                            # Execute function
+                            output[k] = func(output[k])
+                        else:
+                            raise Exception("Function {item_value} not provided")
+
                     else:
                         raise Exception(f"Unknown type {item_type} for {item_value}")
-                elif isinstance(item, Callable):
-                    # If item is a function, call it for current output[k]
-                    output[k] = item(output[k])
                 else:
                     # Skip all values other than str and function
                     pass

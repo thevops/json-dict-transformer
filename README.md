@@ -15,70 +15,9 @@ but changing the structure.
 
 ## Example
 
-```python
-from json_dict_transformer import translateDictToDict
+Take a look at [examples/example-1.py](examples/example-1.py)
 
-input_dict = {
-    "name": "John",
-    "surname": "Doe",
-    "age": 30,
-    "address": {
-        "street": "Main Street",
-        "number": 123,
-        "city": "New York",
-        "country": "USA"
-    },
-    "hobbies": [
-        "football",
-        "basketball",
-        "tennis"
-    ]
-}
-
-schema_dict = {
-    "full name": ["json::name", "txt:: ", "json::surname"],
-    "age": ["json::age"],
-    "address": [
-        "json::address.street",
-        "txt::,",
-        "json::address.number",
-        "txt::,",
-        "json::address.city",
-        "txt::,",
-        "json::address.country"
-    ],
-    "hobbies": [
-        "txt::My hobbies are: ",
-        upperLetters, # this is function
-        "json::hobbies"
-    ]
-}
-
-output_dict = translateDictToDict(input_dict, schema_dict)
-print(output_dict)
-```
-
-Input dict:
-```
-{
-  'name': 'John',
-  'surname': 'Doe',
-  'age': 30,
-  'address': {
-    'street': 'Main Street',
-    'number': 123,
-    'city': 'New York',
-    'country': 'USA'
-  },
-  'hobbies': [
-    'football',
-    'basketball',
-    'tennis'
-  ]
-}
-```
-
-Output dict:
+Output:
 ```
 {
   'full name': 'John Doe',
@@ -152,3 +91,7 @@ Requires to handle a single argument of type string.
 ### 1.1.0
 
 - Add support for functions for processing data during transformation
+
+### 1.1.1
+
+- Fix functions feature
