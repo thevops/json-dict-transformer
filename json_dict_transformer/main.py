@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 def getDictfield(data, field):
     """
     Get value from dict field using dot notation
@@ -22,7 +24,7 @@ def getDictfield(data, field):
         raise Exception(f"Unknown type {type(result)} for {field}")
 
 
-def translateDictToDict(input: dict, schema: dict) -> dict:
+def translateDictToDict(input: dict, schema: dict, funcCollection: Callable = None) -> dict:
     """
     Create output dict from input dict using schema dict as template.
     This function is recursive.
@@ -41,21 +43,35 @@ def translateDictToDict(input: dict, schema: dict) -> dict:
             output[k] = "" # the same as "v", but "v" is used for iteration
 
             for item in v:
-                # Recognized format: <type>::<value>
-                # Remember about double colon!
-                item_type, item_value = item.split("::")
+                if isinstance(item, str):
+                    # Recognized format: <type>::<value>
+                    # Remember about double colon!
+                    item_type, item_value = item.split("::")
 
-                if item_type == "json":
-                    # Extract the proper field from input dict
-                    input_field_value = getDictfield(input, item_value)
-                    # Concatenate the value to the output
-                    output[k] = output[k] + input_field_value
+                    if item_type == "json":
+                        # Extract the proper field from input dict
+                        input_field_value = getDictfield(input, item_value)
+                        # Concatenate the value to the output
+                        output[k] = output[k] + input_field_value
 
-                elif item_type == "txt":
-                    output[k] = output[k] + item_value
+                    elif item_type == "txt":
+                        output[k] = output[k] + item_value
 
+                    elif item_type == "func":
+                        # Check if function collection is provided
+                        if funcCollection is not None:
+                            # Get function from collection
+                            func = getattr(funcCollection, item_value)
+                            # Execute function
+                            output[k] = func(output[k])
+                        else:
+                            raise Exception("Function {item_value} not provided")
+
+                    else:
+                        raise Exception(f"Unknown type {item_type} for {item_value}")
                 else:
-                    raise Exception(f"Unknown type {item_type} for {item_value}")
+                    # Skip all values other than str and function
+                    pass
 
             # Remove leading and trailing whitespaces
             output[k] = output[k].strip()

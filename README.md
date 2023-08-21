@@ -13,78 +13,17 @@ For example, splitting some fields or concatenating fields into other fields.
 In other words, it is a process of reformatting JSON data preserving values
 but changing the structure.
 
-
 ## Example
 
-```python
-from json_dict_transformer import translateDictToDict
+Take a look at [examples/example-1.py](examples/example-1.py)
 
-input_dict = {
-    "name": "John",
-    "surname": "Doe",
-    "age": 30,
-    "address": {
-        "street": "Main Street",
-        "number": 123,
-        "city": "New York",
-        "country": "USA"
-    },
-    "hobbies": [
-        "football",
-        "basketball",
-        "tennis"
-    ]
-}
-
-schema_dict = {
-    "full name": ["json::name", "txt:: ", "json::surname"],
-    "age": ["json::age"],
-    "address": [
-        "json::address.street",
-        "txt::,",
-        "json::address.number",
-        "txt::,",
-        "json::address.city",
-        "txt::,",
-        "json::address.country"
-    ],
-    "hobbies": [
-        "txt::My hobbies are: ",
-        "json::hobbies"
-    ]
-}
-
-output_dict = translateDictToDict(input_dict, schema_dict)
-print(output_dict)
-```
-
-Input dict:
-```
-{
-  'name': 'John',
-  'surname': 'Doe',
-  'age': 30,
-  'address': {
-    'street': 'Main Street',
-    'number': 123,
-    'city': 'New York',
-    'country': 'USA'
-  },
-  'hobbies': [
-    'football',
-    'basketball',
-    'tennis'
-  ]
-}
-```
-
-Output dict:
+Output:
 ```
 {
   'full name': 'John Doe',
   'age': '30',
   'address': 'Main Street,123,New York,USA',
-  'hobbies': 'My hobbies are: football,basketball,tennis'
+  'hobbies': 'MY HOBBIES ARE: football,basketball,tennis'
 }
 ```
 
@@ -130,7 +69,29 @@ The selector adds a string. It can be used to add a splitter or
 any other text to the output data.
 
 
+`<function>` (Callable object)
+
+Allows to use a function over the data on the left side of that function.
+A function can be passed from outside.
+Requires to handle a single argument of type string.
+
+
 ## Similar projects
 
 - https://github.com/Onyo/jsonbender
 - https://github.com/ebi-ait/json-converter
+
+
+## Changelog
+
+### 1.0.0
+
+- The first version
+
+### 1.1.0
+
+- Add support for functions for processing data during transformation
+
+### 1.1.1
+
+- Fix functions feature
